@@ -1,4 +1,4 @@
-# arm-versatilepb
+# arm-bare-metal
 Virtual bare metal programming environment for ARM processor
 
 # Environment
