@@ -1,6 +1,5 @@
-volatile unsigned int *const UARTDR = (unsigned int *)0x101F1000;
+extern volatile unsigned int *const UARTDR;
 
-// Put a string on standard output from UART0 device (PL011).
 void puts(const char *s)
 {
 	while (*s) {
