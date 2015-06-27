@@ -58,11 +58,11 @@ $ sudo apt-get install qemu-system
 
 # How to build and run
 
-After binutils and GCC for ARM and QEMU are installed. we can build a program image and run it on a bare metal ARM processor on QEMU. This repository contains a minimal boot code and a linker script, so we can just clone it and run `make` to make the boot image whose name is `image.bin`.
+After binutils and GCC for ARM and QEMU are installed. We can build a program image and run it on a bare metal ARM processor on QEMU. This repository contains a minimal boot code and a linker script, so we can just clone it and run `make` to make the boot image whose name is `image`.
 
 ```console
-$ git clone https://github.com/tanakahx/arm-versatilepb.git
-$ cd arm-versatilepb
+$ git clone https://github.com/tanakahx/arm-bare-metal.git
+$ cd arm-bare-metal
 $ make
 ```
 
@@ -77,7 +77,7 @@ $ make dis
 The boot image can be executed with QEMU like the following.
 
 ```console
-$ qemu-system-arm -M versatilepb -nographic -kernel image.bin
+$ qemu-system-arm -M versatilepb -nographic -kernel image
 ```
 
 or just
@@ -87,3 +87,14 @@ $ make run
 ```
 
 To exit QEMU, press `C-a x` (`Ctrl + a` and then `x` successively).
+
+# CPU type option
+
+We can give CPU type option to `make` like
+
+```console
+$ make CPU=cortex-m3
+$ make run CPU=cortex-m3
+```
+
+The default CPU type is `CPU=arm926ej-s`. Supported type is listed in the head lines of `Makefile`.
