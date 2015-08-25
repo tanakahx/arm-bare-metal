@@ -1,6 +1,6 @@
-CPU := arm926ej-s
-# CPU := cortex-m3
-# CPU := cortex-a9
+#CPU := arm926ej-s
+CPU := cortex-m3
+#CPU := cortex-a9
 
 ifeq ($(CPU), arm926ej-s)
 MACHINE := versatilepb
@@ -17,23 +17,29 @@ MACHINE := realview-pbx-a9
 VMA := 0x00000000
 endif
 
-CC := arm-none-eabi-gcc
-CFLAGS = -Wall -fno-builtin
+CC := arm-linux-gnueabi-gcc
+LD := arm-linux-gnueabi-ld
+OBJCOPY := arm-linux-gnueabi-objcopy
+OBJDUMP := arm-linux-gnueabi-objdump
+QEMU := qemu-system-arm
 
-LD := ld-arm
+CFLAGS = -Wall -fno-builtin
 LDFLAGS =
 
 OBJS := src/main.o
 
-include cpu/$(CPU)/Makefile
-
 TARGET := image
 
-$(TARGET): $(TARGET).elf
-	objcopy-arm -O binary $< $@
+all:
+	$(MAKE) $(TARGET)
+
+include cpu/$(CPU)/Makefile
 
 $(TARGET).elf: $(OBJS)
 	$(LD) -o $@ $(LDFLAGS) $^
+
+$(TARGET): $(TARGET).elf
+	$(OBJCOPY) -O binary $< $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $<
@@ -44,10 +50,10 @@ $(TARGET).elf: $(OBJS)
 .PHONY: dis run clean
 
 dis:
-	objdump-arm -D -b binary -m arm --adjust-vma=$(VMA) $(TARGET)
+	$(OBJDUMP) -D -b binary -m arm --adjust-vma=$(VMA) $(TARGET)
 
 run:
-	qemu-system-arm -M $(MACHINE) -nographic -kernel $(TARGET)
+	$(QEMU) -M $(MACHINE) -nographic -kernel $(TARGET)
 
 clean:
 	-@$(foreach obj, */*/*.o, rm $(obj);)
