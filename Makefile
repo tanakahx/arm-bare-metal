@@ -50,5 +50,6 @@ run:
 	qemu-system-arm -M $(MACHINE) -nographic -kernel $(TARGET)
 
 clean:
+	-@$(foreach obj, */*.o, rm $(obj);)
 	-@$(foreach obj, */*/*.o, rm $(obj);)
 	-rm $(TARGET) $(TARGET).elf
